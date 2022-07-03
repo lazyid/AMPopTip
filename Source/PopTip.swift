@@ -267,8 +267,16 @@ open class PopTip: UIView {
     frame.size = CGSize(width: textBounds.width + padding * 2 + edgeInsets.horizontal, height: textBounds.height + padding * 2 + edgeInsets.vertical + arrowSize.height)
     var x = from.origin.x + from.width / 2 - frame.width / 2
     if x < 0 { x = edgeMargin }
-    if constrainInContainerView && (x + frame.width > containerView.bounds.width) {
-      x = containerView.bounds.width - frame.width - edgeMargin
+    if containerView is UICollectionView {
+      if let collection:UICollectionView = containerView as? UICollectionView {
+          if constrainInContainerView && (x + frame.width > collection.contentSize.width) {
+            x = collection.contentSize.width - frame.width - edgeMargin
+          }
+      }
+    }else{
+        if constrainInContainerView && (x + frame.width > containerView.bounds.width) {
+          x = containerView.bounds.width - frame.width - edgeMargin
+        }
     }
 
     if direction == .down {
